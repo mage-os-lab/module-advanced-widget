@@ -14,6 +14,7 @@ $htmlName = $block->getData('htmlName');
 $fieldData = $block->getData('fieldData');
 $isModal = $block->getData('isModal');
 $isRequired = isset($fieldData['required']) && $fieldData['required'];
+$defaultColor = $fieldData['default'] ?? '#FFFFFF';
 ?>
 <input data-field="<?= /** @noEscape */ $fieldName; ?>"
     <?php if ($isModal): ?>
@@ -23,6 +24,7 @@ $isRequired = isset($fieldData['required']) && $fieldData['required'];
         id="<?= /** @noEscape */ "colorpicker_{$htmlId}_{$fieldName}_<%- data.index %>"; ?>"
     <?php endif; ?>
        data-type="<?= /** @noEscape */ $fieldData['type'] ?>"
+       data-default="<?= $escaper->escapeHtmlAttr($defaultColor); ?>"
        name="<?= /** @noEscape */ $htmlName; ?>[<%- data.index %>][<?= /** @noEscape */ $fieldName; ?>]"
        value="<%- data.<?=  $fieldName; ?> %>"
     <?php if ($isRequired): ?>
