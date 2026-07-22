@@ -13,7 +13,9 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface as FormElemen
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Store\Model\Store;
 
 class Repeatable extends Template implements FormElementRenderer
@@ -49,6 +51,8 @@ class Repeatable extends Template implements FormElementRenderer
         protected ProductRepositoryInterface $productRepository,
         protected CollectionFactory $productCollectionFactory,
         protected ImageHelper $imageHelper,
+        protected JsonSerializer $jsonSerializer,
+        protected AssetRepository $assetRepository,
         protected array $customFields = [],
         array $data = []
     ) {
@@ -255,5 +259,31 @@ class Repeatable extends Template implements FormElementRenderer
         return $this->getLayout()->createBlock(
             $block::class
         )->getMainFormHtml($id);
+    }
+
+    public function getWysiwygConfig(): bool|string
+    {
+        $config =  [
+            'turn_on' => false,
+            'turn_on_modal' => false,
+            'height' => "300px",
+            'plugins' => [],
+            'tinymce' => [
+                'toolbar' => 'undo redo | styleselect | fontsizeselect | lineheight | forecolor backcolor | bold italic underline | alignleft aligncenter alignright | numlist bullist',
+                'plugins' => implode(
+                    ' ',
+                    [
+                        'advlist',
+                        'lists',
+                    ]
+                ),
+                'content_css' => [
+                    $this->assetRepository->getUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/ui.css'),
+                    $this->assetRepository->getUrl('Magento_PageBuilder::css/source/form/element/tinymce.css')
+                ]
+            ],
+        ];
+
+        return $this->jsonSerializer->serialize($config);
     }
 }

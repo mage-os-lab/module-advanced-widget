@@ -53,6 +53,10 @@ $parameterName = $block->getParameterName();
 <?php $rowEditorId = "mageos_row_editor_" . $id; ?>
 <div id="<?= /** @noEscape */ $rowEditorId; ?>" style="display:none;"></div>
 <script>
+   window.mageos = window.mageos || {};
+    window.mageos.wyiwyg_config = <?= $block->getWysiwygConfig() ?>;
+</script>
+<script>
     require([
         'mage/template',
         'jquery',
@@ -240,6 +244,7 @@ $parameterName = $block->getParameterName();
                             $j('[name="parameters[' + parameterName + '][' + index + '][' + key + ']"]').val(value);
                             $j('[name="parameters[' + parameterName + '][' + index + '][' + key + ']"]').attr("value", value);
                         }
+                        $j('[name="parameters[' + parameterName + '][' + index + '][' + key + ']"]').trigger({type:"changeValue", value:value});
                     }
                     $j(window).trigger('mageos_row_modal_update_customfields_<?= /** @noEscape */ $htmlId ?>', {detail: extractedData});
                     $j(window).off('mageos_row_modal_update_customfields_<?= /** @noEscape */ $htmlId ?>');
@@ -286,5 +291,21 @@ $parameterName = $block->getParameterName();
                     $j('#repeatable_widget_<?= $htmlId; ?>').addClass("validation-error");
                 }
             });
+
+
+        // initialize color picker
+        let colorPickerInputs = $j('[data-type="colorpicker"]');
+        colorPickerInputs.each(function(index, element) {
+            let value = $j(element).attr('value');
+            var colorPicker = new JSColor(element, {
+                value: value ? value : '#FFFFFF',
+                format:'rgba',
+                required: false
+            });
+
+            $j(element).on('changeValue', function(e) {
+                colorPicker.fromString(e.value);
+            });
+        })
     });
 </script>
