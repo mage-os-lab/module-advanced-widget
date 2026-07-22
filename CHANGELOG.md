@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.2.4
+### Added
+- Colorpicker repeatable field: configurable starting color via a `default` row config key (`'default' => '#RRGGBB'` or an `rgba(...)` value). When omitted it still falls back to `#FFFFFF`.
+### Fixed
+- sync correctly colorpicker values sync between preview and modal
+- wysiwyg field now shows a limited number of elements on the toolbar
+
 ## 1.2.3
 ### Fixed
 - Remove debugging code
